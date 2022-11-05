@@ -1,23 +1,40 @@
-import { NativeBaseProvider, StatusBar } from 'native-base';
-import { useFonts, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold } from "@expo-google-fonts/roboto"
+import { NativeBaseProvider, StatusBar } from "native-base";
+import {
+  useFonts,
+  Roboto_400Regular,
+  Roboto_500Medium,
+  Roboto_700Bold,
+} from "@expo-google-fonts/roboto";
 
-import { SignIn } from './src/screens/SignIn';
-import { Loading } from './src/components/Loading';
+import { AuthContextProvider } from "./src/contexts/AuthContext";
 
-import { THEME } from './src/styles/theme';
+import { SignIn } from "./src/screens/SignIn";
+import { NewPool } from "./src/screens/NewPool";
+import { FindPool } from "./src/screens/FindPool";
+import { MyPools } from "./src/screens/MyPools";
+import { Loading } from "./src/components/Loading";
+
+import { THEME } from "./src/styles/theme";
 
 export default function App() {
-  const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_500Medium, Roboto_700Bold });
+  const [fontsLoaded] = useFonts({
+    Roboto_400Regular,
+    Roboto_500Medium,
+    Roboto_700Bold,
+  });
 
   return (
     <NativeBaseProvider theme={THEME}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent
-      />
+      <AuthContextProvider>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
 
-      {fontsLoaded ? <SignIn /> : <Loading />}
+        {fontsLoaded ? <SignIn /> : <Loading />}
+        {/* {fontsLoaded ? <MyPools /> : <Loading />} */}
+      </AuthContextProvider>
     </NativeBaseProvider>
   );
 }
