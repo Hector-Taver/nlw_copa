@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 export interface AppConfig {
-  API_TOKEN: string,
+  GOOGLE_OAUTH_CLIENT_ID: string,
 }
 
 export default {
@@ -36,6 +36,6 @@ export default {
     "favicon": "./assets/favicon.png"
   },
   extra: {
-    API_TOKEN: process.env.API_TOKEN,
+    GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
   },
 };
