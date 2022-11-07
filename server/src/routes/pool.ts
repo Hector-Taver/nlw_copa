@@ -154,21 +154,73 @@ export async function poolRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // fastify.get(
+  //   "/pools/:id",
+  //   {
+  //     onRequest: [authenticate],
+  //   },
+  //   async (request) => {
+  //     const getPoolParams = z.object({
+  //       id: z.string(),
+  //     });
+
+  //     const { id } = getPoolParams.parse(request.params);
+
+  //     const pool = await prisma.pool.findUnique({
+  //       where: {
+  //         id,
+  //       },
+  //       include: {
+  //         _count: {
+  //           select: {
+  //             participants: true,
+  //           },
+  //         },
+  //         participants: {
+  //           select: {
+  //             id: true,
+
+  //             user: {
+  //               select: {
+  //                 avatarUrl: true,
+  //               },
+  //             },
+  //           },
+  //           take: 4,
+  //         },
+  //         owner: {
+  //           select: {
+  //             id: true,
+  //             name: true,
+  //           },
+  //         },
+  //       },
+  //     });
+
+  //     return { pool };
+  //   }
+  // );
+
   fastify.get(
-    "/pools/:id",
+    "/pools/:poolId",
     {
       onRequest: [authenticate],
     },
-    async (request) => {
+    async (request, reply) => {
       const getPoolParams = z.object({
-        id: z.string(),
+        poolId: z.string(),
       });
 
-      const { id } = getPoolParams.parse(request.params);
+      const { poolId } = getPoolParams.parse(request.params);
 
-      const pool = await prisma.pool.findUnique({
+      const pool = await prisma.pool.findFirst({
         where: {
-          id,
+          id: poolId,
+          participants: {
+            some: {
+              userId: request.user.sub,
+            },
+          },
         },
         include: {
           _count: {
@@ -196,6 +248,12 @@ export async function poolRoutes(fastify: FastifyInstance) {
           },
         },
       });
+
+      if (!pool) {
+        return reply.status(400).send({
+          message: "Pool not found.",
+        });
+      }
 
       return { pool };
     }

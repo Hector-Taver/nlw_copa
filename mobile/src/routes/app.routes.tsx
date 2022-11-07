@@ -6,6 +6,7 @@ import { Platform } from "react-native";
 import { NewPool } from "../screens/NewPool";
 import { MyPools } from "../screens/MyPools";
 import { FindPool } from "../screens/FindPool";
+import { PoolDetails } from "../screens/PoolDetails";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -54,6 +55,12 @@ export function AppRoutes() {
       <Screen
         name="find"
         component={FindPool}
+        options={{ tabBarButton: () => null }}
+      />
+
+      <Screen
+        name="details"
+        component={PoolDetails}
         options={{ tabBarButton: () => null }}
       />
     </Navigator>
